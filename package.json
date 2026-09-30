@@ -1,0 +1,22 @@
+{
+  "name": "qa-framework",
+  "version": "1.0.0",
+  "private": true,
+  "description": "A framework that tests the supplied course applications.",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "test": "cross-env APP_ENV=dev playwright test --grep-invert \"@safety\" --pass-with-no-tests",
+    "test:prod": "cross-env APP_ENV=prod playwright test --grep-invert \"@safety\"",
+    "test:list": "cross-env APP_ENV=dev playwright test --list --pass-with-no-tests",
+    "test:safety": "cross-env APP_ENV=dev playwright test --grep \"@safety\"",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.61.1",
+    "@types/node": "^24.19.0",
+    "cross-env": "^10.1.0",
+    "typescript": "~5.9.3"
+  }
+}
