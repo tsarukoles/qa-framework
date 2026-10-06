@@ -1,6 +1,6 @@
 # qa-framework
 
-Playwright + TypeScript UI tests for the course applications. No Page Objects, Jira, database, MCP, or CI yet.
+Playwright + TypeScript UI tests for the course applications, with Page Objects in `pages/`. No Jira, database, MCP, or CI yet.
 
 ## Boundaries
 - One target per process via `getTarget()` / `currentEnv()`. Start a new process to switch; never unpin.
@@ -12,6 +12,13 @@ Playwright + TypeScript UI tests for the course applications. No Page Objects, J
 - One Chromium project, `testDir` `tests`, `retries: 0`, `data-testid` locators.
 - No new dependencies or sample tests unless asked. Never commit secrets.
 - Keep `README.md`, `.gitignore`, and the committed `package-lock.json` as they are.
+
+## Page Objects
+- One class per page in [pages/](pages/), each extending [BasePage](pages/BasePage.ts): `page`, `goto(path)`, `envBanner`.
+- Locators are `readonly` fields created in the constructor with `getByTestId`.
+- Verify every `data-testid` against the live dev page before adding it.
+- Method names say what the user does (`open()`, `login(email, password)`), not one click per method.
+- `goto(path)` takes a relative path; a page object never picks a target or reads the environment.
 
 ## Commands
 - `npm test` / `npm run test:prod` - browser tests on dev / prod (prod exits 1 until specs exist).

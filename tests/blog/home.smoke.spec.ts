@@ -12,27 +12,25 @@
 import { expect, test } from '@playwright/test';
 
 import { runIfEnv } from '../../env/runIfEnv';
-
-// data-testid values verified by hand on the live dev page.
-const ENV_BANNER = 'env-banner';
-const ARTICLE_LIST = 'article-list';
-const ARTICLE_LINK = 'article-link';
+import { BlogListPage } from '../../pages/BlogListPage';
 
 test.describe('blog home', () => {
   runIfEnv(test, ['dev']);
 
   test('the banner is visible and identifies DEVELOPMENT', async ({ page }) => {
-    await page.goto('/');
+    const blogList = new BlogListPage(page);
+    await blogList.open();
 
-    const banner = page.getByTestId(ENV_BANNER);
+    const banner = blogList.envBanner;
     await expect(banner).toBeVisible();
     await expect(banner).toContainText('DEVELOPMENT');
   });
 
   test('the first article card is visible and at least one card exists', async ({ page }) => {
-    await page.goto('/');
+    const blogList = new BlogListPage(page);
+    await blogList.open();
 
-    const cards = page.getByTestId(ARTICLE_LIST).getByTestId(ARTICLE_LINK);
+    const cards = blogList.articleLinks;
     await expect(cards).not.toHaveCount(0);
     await expect(cards.first()).toBeVisible();
   });

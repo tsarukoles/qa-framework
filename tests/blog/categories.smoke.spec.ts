@@ -9,22 +9,19 @@
 import { expect, test } from '@playwright/test';
 
 import { runIfEnv } from '../../env/runIfEnv';
-import { loginViaUi } from '../support/auth';
+import { CategoriesPage } from '../../pages/CategoriesPage';
+import { LoginPage } from '../../pages/LoginPage';
 import { AUTHOR } from '../support/users';
-
-// data-testid values verified by hand on the live dev /categories page.
-const CATEGORY_LIST = 'category-list';
-const CATEGORY_ITEM = 'category-item';
 
 test.describe('blog categories', () => {
   runIfEnv(test, ['dev']);
 
   test('a signed-in author sees the category list with at least one item', async ({ page }) => {
-    await loginViaUi(page, AUTHOR);
-    await page.goto('/categories');
+    await new LoginPage(page).login(AUTHOR.email, AUTHOR.password);
+    const categories = new CategoriesPage(page);
+    await categories.open();
 
-    const list = page.getByTestId(CATEGORY_LIST);
-    await expect(list).toBeVisible();
-    await expect(list.getByTestId(CATEGORY_ITEM).first()).toBeVisible();
+    await expect(categories.list).toBeVisible();
+    await expect(categories.items.first()).toBeVisible();
   });
 });
