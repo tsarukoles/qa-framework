@@ -13,6 +13,6 @@
     "noEmit": true,
     "allowImportingTsExtensions": true
   },
-  "include": ["env", "pages", "tests", "playwright.config.ts"],
+  "include": ["env", "pages", "safety", "tests", "playwright.config.ts", "playwright.safety.config.ts"],
   "exclude": ["node_modules", "test-results", "playwright-report", "blob-report"]
 }

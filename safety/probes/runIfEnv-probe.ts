@@ -1,13 +1,13 @@
 /**
- * Fresh-process probe - not a test. Spawned by tests/safety/freshProcess.safety.spec.ts with a
+ * Fresh-process probe - not a test. Spawned by safety/freshProcess.safety.spec.ts with a
  * chosen environment. It calls runIfEnv with a recording fake instead of Playwright's `test`, then
  * prints one JSON line listing every skip decision it was handed.
  *
  * The allowed list arrives as one comma-separated argument (argv, not env, so it cannot disturb the
  * environment under test). An empty argument means an empty list.
  */
-import { runIfEnv, type SkippableTest } from '../../../env/runIfEnv.ts';
-import type { AppEnv } from '../../../env/target.ts';
+import { runIfEnv, type SkippableTest } from '../../env/runIfEnv.ts';
+import type { AppEnv } from '../../env/target.ts';
 
 const allowed = (process.argv[2] ?? '')
   .split(',')

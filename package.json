@@ -10,7 +10,7 @@
     "test": "cross-env APP_ENV=dev playwright test --grep-invert \"@safety\" --pass-with-no-tests",
     "test:prod": "cross-env APP_ENV=prod playwright test --grep-invert \"@safety\"",
     "test:list": "cross-env APP_ENV=dev playwright test --list --pass-with-no-tests",
-    "test:safety": "cross-env APP_ENV=dev playwright test --grep \"@safety\"",
+    "test:safety": "cross-env APP_ENV=dev playwright test --config playwright.safety.config.ts",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {

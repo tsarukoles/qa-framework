@@ -1,10 +1,10 @@
 /**
- * Fresh-process probe - not a test. Spawned by tests/safety/freshProcess.safety.spec.ts with a
+ * Fresh-process probe - not a test. Spawned by safety/freshProcess.safety.spec.ts with a
  * chosen environment. It resolves the target once, in a brand-new process, and prints one JSON line.
  *
  * Runs under Node's native TypeScript support, which is why imports carry the `.ts` extension.
  */
-import { getTarget, readSettingsFromEnvironment, type TargetConfigError } from '../../../env/target.ts';
+import { getTarget, readSettingsFromEnvironment, type TargetConfigError } from '../../env/target.ts';
 
 const settings = readSettingsFromEnvironment();
 

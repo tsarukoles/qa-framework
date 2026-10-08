@@ -13,7 +13,7 @@
  *   - In PowerShell, `$env:APP_ENV = ""` DELETES the variable instead of setting it to empty
  *     (`set APP_ENV=` does the same in cmd.exe). So the empty-string rejection below cannot be
  *     reproduced by hand at a prompt: it resolves to `dev`, correctly. That branch is covered by
- *     the pure checks in `tests/safety/` instead. A shell limitation, not a resolver bug.
+ *     the pure checks in `safety/` instead. A shell limitation, not a resolver bug.
  *   - `process.env` lookups are case-insensitive on Windows but case-sensitive on Linux, so
  *     `$env:app_env='prod'` would work locally and do nothing in CI. This module reads only the
  *     exact name `APP_ENV`.

@@ -9,9 +9,9 @@
  */
 import { expect, test } from '@playwright/test';
 
-import { runIfEnv, skipReason, type SkippableTest } from '../../env/runIfEnv';
-import { currentEnv, getTarget, type AppEnv } from '../../env/target';
-import * as targetViaTsSpecifier from '../../env/target.ts';
+import { runIfEnv, skipReason, type SkippableTest } from '../env/runIfEnv';
+import { currentEnv, getTarget, type AppEnv } from '../env/target';
+import * as targetViaTsSpecifier from '../env/target.ts';
 
 type SkipCall = { condition: boolean; reason: string };
 
@@ -112,7 +112,7 @@ test.describe('runIfEnv', { tag: '@safety' }, () => {
 
   test('helpers and specs share one resolver instance, whichever specifier imports it', () => {
     // The helpers import './target.ts' (Node's native loader needs the extension); specs import
-    // '../../env/target'. Two module instances would mean two independent pins - a quiet way
+    // '../env/target'. Two module instances would mean two independent pins - a quiet way
     // round the one-target-per-process rule - so this asserts they are the same instance.
     expect(targetViaTsSpecifier.getTarget()).toBe(getTarget());
   });

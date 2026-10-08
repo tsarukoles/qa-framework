@@ -6,7 +6,7 @@
  * touches the network. That purity is what lets the whole truth table live in one file, run in
  * parallel in any order, and stay runnable even when the ambient environment is the broken thing.
  *
- * Run with `npm run test:safety`. They are tagged `@safety` so the browser scripts exclude them.
+ * Run with `npm run test:safety`. They live in `safety/`, so the browser run never collects them.
  */
 import { expect, test } from '@playwright/test';
 
@@ -16,7 +16,7 @@ import {
   type TargetEnvName,
   type TargetErrorCode,
   type TargetSettings,
-} from '../../env/target';
+} from '../env/target';
 
 const DEV = 'https://dev.ai-orchestration-courses.com';
 const PROD = 'https://ai-orchestration-courses.com';

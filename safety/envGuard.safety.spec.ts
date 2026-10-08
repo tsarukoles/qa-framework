@@ -8,8 +8,8 @@
  */
 import { expect, test } from '@playwright/test';
 
-import { EnvGuardError, envGuard, isDataChangeAllowed } from '../../env/envGuard';
-import { currentEnv } from '../../env/target';
+import { EnvGuardError, envGuard, isDataChangeAllowed } from '../env/envGuard';
+import { currentEnv } from '../env/target';
 
 /** An in-memory stand-in for a data-changing action. */
 function dummyAction<T>(value: T): { readonly action: () => T; calls: () => number } {

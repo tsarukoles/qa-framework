@@ -1,32 +1,51 @@
 # qa-framework
 
-Playwright + TypeScript UI tests for the course applications, with Page Objects in `pages/`. No Jira, database, MCP, or CI yet.
+Playwright + TypeScript UI tests for the course applications. Page Objects live in `pages/`.
+This file is the short version. The details are in the rule files below.
 
-## Boundaries
-- One target per process via `getTarget()` / `currentEnv()`. Start a new process to switch; never unpin.
-- `APP_ENV` is exactly `dev` or `prod`; missing means dev. `BASE_URL` unset or exactly canonical.
-- `LOCAL_SANDBOX_DIR` is rejected. No local server, no alternate target, no second env parser.
-- Never echo a rejected `BASE_URL` or `LOCAL_SANDBOX_DIR` value into an error message.
-- Gate env-specific tests with `runIfEnv(test, [...])`; wrap data changes in `envGuard(action)`.
-- `envGuard` throws before the action on prod. Never add a dry-run or log-and-continue mode.
-- One Chromium project, `testDir` `tests`, `retries: 0`, `data-testid` locators.
-- No new dependencies or sample tests unless asked. Never commit secrets.
-- Keep `README.md`, `.gitignore`, and the committed `package-lock.json` as they are.
+## Targets
+| `APP_ENV` | Address | Use |
+|---|---|---|
+| `dev` (default when unset) | `https://dev.ai-orchestration-courses.com` | Daily work. Shared site. |
+| `prod` | `https://ai-orchestration-courses.com` | Read-only checks. |
 
-## Page Objects
-- One class per page in [pages/](pages/), each extending [BasePage](pages/BasePage.ts): `page`, `goto(path)`, `envBanner`.
-- Locators are `readonly` fields created in the constructor with `getByTestId`.
-- Verify every `data-testid` against the live dev page before adding it.
-- Method names say what the user does (`open()`, `login(email, password)`), not one click per method.
-- `goto(path)` takes a relative path; a page object never picks a target or reads the environment.
+- `APP_ENV` is exactly `dev` or `prod`. Leave `BASE_URL` unset.
+- One target per process. Start a new process to switch.
+
+## Teaching logins
+| Role | Email | Where the values live |
+|---|---|---|
+| author | `author@codemify.test` | `AUTHOR` in [tests/support/users.ts](tests/support/users.ts) |
+| admin | `admin@codemify.test` | Not in the repo yet. Add it to `users.ts` when a test needs it. |
+
+Both are seeded demo accounts, shown on the dev `/login` page. Import them. Never retype them.
 
 ## Commands
-- `npm test` / `npm run test:prod` - browser tests on dev / prod (prod exits 1 until specs exist).
-- `npm run test:safety` - isolated checks: pure resolver, helper fakes, fresh-process probes.
-- `npm run typecheck` - `tsc --noEmit`. `npm run test:list` lists tests without running them.
-- `npx playwright install chromium` - one-time browser download. Drop `--pass-with-no-tests` once real specs exist.
+- `npm test` - browser tests on dev.
+- `npm run test:prod` - browser tests on prod.
+- `npm run test:list` - list the browser tests without running them.
+- `npm run test:safety` - isolated checks in `safety/`. No browser.
+- `npm run typecheck` - `tsc --noEmit`.
+- `npx playwright test` and `npx playwright test --list` cover browser tests only.
+- `npx playwright install chromium` - one-time browser download.
 
-## Files
-[env/target.ts](env/target.ts) is the only resolver; [env/runIfEnv.ts](env/runIfEnv.ts) and [env/envGuard.ts](env/envGuard.ts) read it via `currentEnv()`.
-[tests/support/env.ts](tests/support/env.ts) wraps it and must never import [playwright.config.ts](playwright.config.ts).
-Probes: [tests/safety/probes/](tests/safety/probes/) (imports inside `env/` need `.ts` for them). Also [tsconfig.json](tsconfig.json), [README.md](README.md).
+## Always
+1. No data change on prod.
+2. Human approval before any write to an outside system.
+3. No secrets in the repo or in output.
+
+## Rule files
+| File | Loads | Covers |
+|---|---|---|
+| [01-guardrails.md](.claude/rules/01-guardrails.md) | Always | Environment safety, approval gates, secrets, where checks live |
+| [10-playwright-pom.md](.claude/rules/10-playwright-pom.md) | When a file in `pages/`, `tests/` or `evidence/`, or `playwright.config.ts`, is read or edited | Locators, page objects, waits, assertions, verified test ids |
+| [20-data-management.md](.claude/rules/20-data-management.md) | When a file in `pages/`, `tests/` or `evidence/` is read or edited | Seed data, shared data, created records, cleanup |
+
+The rule files are in `.claude/rules/`. A ⚠️ there marks a rule that can be broken without any test failing.
+
+## Where things live
+- [env/](env/) - the only target resolver, plus `runIfEnv` and `envGuard`.
+- [pages/](pages/) - page objects. [tests/](tests/) - browser tests, and shared data in `tests/support/`.
+- [safety/](safety/) - isolated checks, run with [playwright.safety.config.ts](playwright.safety.config.ts).
+- [evidence/](evidence/) - saved task evidence. Do not edit it.
+- [jira-seed/](jira-seed/) and [scripts/](scripts/) - the Jira seed pack. A real run writes to Jira.
